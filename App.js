@@ -1,40 +1,33 @@
-import React from 'react';
+import React from "react";
+import { createStackNavigator } from "@react-navigation/stack";
+import { NavigationContainer } from "@react-navigation/native";
 
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+import IntroScreen from "./screens/IntroScreen";
+import MenuScreen from "./screens/MenuScreen";
+import PlayScreen from "./screens/PlayScreen";
 
-import IntroScreen from './screens/IntroScreen';
-import MenuScreen from './screens/MenuScreen';
-import PlayScreen from './screens/PlayScreen';
-import EndGameScreen from './screens/EndGame';
-
-const MainStack = createStackNavigator();
+const Stack = createStackNavigator();
 
 function App() {
   return (
-    <NavigationContainer>
-      <MainStack.Navigator initialRouteName="IntroScreen">
-        <MainStack.Screen
+    <NavigationContainer >
+      <Stack.Navigator initialRouteName="IntroScreen">
+        <Stack.Screen
           name="IntroScreen"
           component={IntroScreen}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
-        <MainStack.Screen
+        <Stack.Screen
           name="MenuScreen"
           component={MenuScreen}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
-        <MainStack.Screen
+        <Stack.Screen
           name="PlayScreen"
           component={PlayScreen}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
-        <MainStack.Screen
-          name="EndGameScreen"
-          component={EndGameScreen}
-          options={{headerShown: false}}
-        />
-      </MainStack.Navigator>
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }

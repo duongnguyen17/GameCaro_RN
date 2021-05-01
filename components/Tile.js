@@ -1,48 +1,41 @@
-import React, {useContext} from 'react';
-import {View, TouchableOpacity, Text, StyleSheet} from 'react-native';
-import {GameContext, ScreenWidth} from '../constants';
+import React, { useEffect } from "react";
+import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
+import { GameContext, TileSize } from "../constants";
 
 export default function Tile(props) {
-  const tileClicked = useContext(GameContext).tileClicked;
-  const matrix = useContext(GameContext).matrix;
-
+  const { value, row, col, onTouch } = props;
   return (
-    <View
-      style={{
-        ...stylesTile.tile,
-        width: Math.floor(ScreenWidth / matrix),
-        height: Math.floor(ScreenWidth / matrix),
-      }}>
-      {props.value === 0 ? (
-        <TouchableOpacity
+    <TouchableOpacity
+      style={stylesTile.container}
+      onPress={() => {
+        if (value === 0) onTouch(row, col);
+      }}
+    >
+      {value === 0 ? null : (
+        <Text
           style={{
-            width: 10,
-            height: 10,
-            backgroundColor: '#fff',
+            ...stylesTile.symbol,
+            color: value === 1 ? "#ff3300" : "#00cc00",
           }}
-          onPress={() => {
-            tileClicked(props.coor);
-          }}
-        />
-      ) : props.value === 1 ? (
-        <Text style={{...stylesTile.symbol, color: '#ff3300'}}>X</Text>
-      ) : (
-        <Text style={{...stylesTile.symbol, color: '#00cc00'}}>O</Text>
+        >
+          {value === 1 ? "X" : "O"}
+        </Text>
       )}
-    </View>
+    </TouchableOpacity>
   );
 }
 const stylesTile = StyleSheet.create({
-  tile: {
-    backgroundColor: '#fff',
-    // backgroundColor: '#99ff99',
+  container: {
+    width: TileSize,
+    height: TileSize,
+    backgroundColor: "#fff",
     borderWidth: 1,
-    borderColor: '#cccccc',
-    justifyContent: 'center',
-    alignItems: 'center',
+    borderColor: "#cccccc",
+    justifyContent: "center",
+    alignItems: "center",
   },
   symbol: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 });

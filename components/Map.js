@@ -1,20 +1,14 @@
-import React, {useContext} from 'react';
-import {StyleSheet, View} from 'react-native';
-import Tile from './Tile';
-import {Coordinate, GameContext, ScreenWidth} from '../constants';
-function Map() {
-  const map = useContext(GameContext).map;
+import React, { useContext } from "react";
+import { StyleSheet, View } from "react-native";
+import Row from "./Row";
+import { MapSize } from "../constants";
+function Map(props) {
+  const { map, onTouch } = props;
   return (
     <View style={stylesMap.map}>
-      {map.map((arr, row) => {
-        return arr.map((currentValue, column) => (
-          <Tile
-            key={row + column}
-            coor={new Coordinate(column, row)}
-            value={currentValue}
-          />
-        ));
-      })}
+      {map.map((arr, index) => (
+        <Row key={index} arr={arr} row={index} onTouch={onTouch} />
+      ))}
     </View>
   );
 }
@@ -23,12 +17,18 @@ export default Map;
 
 const stylesMap = StyleSheet.create({
   map: {
-    width: ScreenWidth,
-    height: ScreenWidth,
-    alignSelf: 'center',
-    backgroundColor: '#f2f2f2',
-    flexWrap: 'wrap',
-    alignContent: 'flex-start',
-    flexDirection: 'row',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    alignSelf: "center",
+    backgroundColor: "#f2f2f2",
+    flexDirection: "column",
+    width: MapSize,
+    height: MapSize,
   },
 });

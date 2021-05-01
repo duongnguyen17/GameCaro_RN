@@ -1,17 +1,32 @@
-import React, {useState} from 'react';
+import React, { useState } from "react";
 import {
   Image,
   SafeAreaView,
   StyleSheet,
   TouchableOpacity,
   Text,
-  Picker
-} from 'react-native';
+  Picker,
+  BackHandler,
+  Alert
+} from "react-native";
 // import Picker from '@react-native-picker/picker';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { ScreenHeight, ScreenWidth } from "../constants";
 
 function MenuScreen(props) {
-  const [selectedValue, setSelectedValue] = useState(13);
+  // const [selectedValue, setSelectedValue] = useState(12);
+
+  const quiteApp = () => {
+    Alert.alert("You are so happy!","Keep playing. Please.... :))))", [
+      {
+        text: "OK :)",
+        onPress: () => {},
+        style: "cancel",
+      },
+      { text: "No. Quite!", onPress: () => BackHandler.exitApp() },
+    ]);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <TouchableOpacity style={styles.btnQuit}>
@@ -19,32 +34,34 @@ function MenuScreen(props) {
           name="cancel"
           size={40}
           color="#808080"
-          onPress={() => {}}
+          onPress={quiteApp}
         />
       </TouchableOpacity>
-      <Image style={styles.logo} source={require('../assets/logo.png')} />
-      <Picker
+      <Image style={styles.logo} source={require("../assets/logo.png")} />
+      {/* <Picker
         selectedValue={selectedValue}
         style={styles.picker}
-        onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}>
+        onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+      >
         <Picker.Item label="10 x 10" value={10} />
         <Picker.Item label="11 x 11" value={11} />
         <Picker.Item label="12 x 12" value={12} />
         <Picker.Item label="13 x 13" value={13} />
         <Picker.Item label="14 x 14" value={14} />
         <Picker.Item label="15 x 15" value={15} />
-      </Picker>
+      </Picker> */}
       <TouchableOpacity
         style={styles.btnPlay}
         onPress={() => {
-          props.navigation.navigate('PlayScreen', {matrix: selectedValue});
-        }}>
-        <Text style={{color: '#fff', fontSize: 50, fontWeight: 'bold'}}>
+          props.navigation.navigate("PlayScreen");
+        }}
+      >
+        <Text style={{ color: "#fff", fontSize: 35, fontWeight: "bold" }}>
           Play
         </Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.btnSetting} onPress={() => {}}>
-        <Text style={{color: '#fff', fontSize: 30, fontWeight: 'bold'}}>
+        <Text style={{ color: "#fff", fontSize: 20, fontWeight: "bold" }}>
           Setting
         </Text>
       </TouchableOpacity>
@@ -56,36 +73,37 @@ export default MenuScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
-    alignItems: 'center',
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent:'center'
   },
   btnQuit: {
-    position: 'absolute',
+    position: "absolute",
     top: 10,
     left: 10,
   },
   logo: {
-    width: 250,
-    height: 250,
-    marginTop: 150,
+    width: Math.floor(ScreenWidth/2),
+    height: Math.floor(ScreenHeight/4),
+    
   },
   btnPlay: {
-    backgroundColor: '#0055ff',
-    width: 180,
-    height: 70,
-    marginTop: 10,
+    backgroundColor: "#66ccff",
+    width: 140,
+    height: 60,
+    marginTop: 60,
     borderRadius: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   btnSetting: {
-    backgroundColor: '#0055ff',
-    width: 140,
+    backgroundColor: "#66ccff",
+    width: 120,
     height: 45,
-    marginTop: 45,
+    marginTop: 20,
     borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   picker: {
     marginTop: 40,
