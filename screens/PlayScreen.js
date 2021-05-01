@@ -17,6 +17,7 @@ import Map from "../components/Map";
 function PlayScreen(props) {
   let count = useRef(0).current;
   let maxCount = useRef(0).current;
+  
   const [turn, setTurn] = useState(Turn.player1);
   const [isEnd, setIsEnd] = useState(false);
   const [isPause, setIsPause] = useState(false);
