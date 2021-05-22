@@ -8,9 +8,9 @@ import PlayScreen from "./screens/PlayScreen";
 
 const Stack = createStackNavigator();
 
-function App() {
+const App = () => {
   return (
-    <NavigationContainer >
+    <NavigationContainer>
       <Stack.Navigator initialRouteName="IntroScreen">
         <Stack.Screen
           name="IntroScreen"
@@ -30,6 +30,6 @@ function App() {
       </Stack.Navigator>
     </NavigationContainer>
   );
-}
+};
 
 export default App;

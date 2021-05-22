@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { SafeAreaView, StyleSheet, Image, Animated, Text } from "react-native";
 import { StackActions } from "@react-navigation/native";
 import { ScreenWidth } from "../constants";
-function IntroScreen(props) {
+const IntroScreen = (props) => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   const animation = () => {
@@ -33,9 +33,9 @@ function IntroScreen(props) {
       </Animated.View>
     </SafeAreaView>
   );
-}
+};
 export default IntroScreen;
-const widthAnim = Math.floor(ScreenWidth / 2)
+const widthAnim = Math.floor(ScreenWidth / 2);
 const styles = StyleSheet.create({
   container: {
     flex: 1,

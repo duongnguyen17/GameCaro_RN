@@ -2,11 +2,11 @@ import React, { useEffect } from "react";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { GameContext, TileSize } from "../constants";
 
-export default function Tile(props) {
-  const { value, row, col, onTouch } = props;
+const Tile = (props) => {
+  const { value, row, col, bgColor, onTouch } = props;
   return (
     <TouchableOpacity
-      style={stylesTile.container}
+      style={[stylesTile.container, { backgroundColor: bgColor }]}
       onPress={() => {
         if (value === 0) onTouch(row, col);
       }}
@@ -23,19 +23,21 @@ export default function Tile(props) {
       )}
     </TouchableOpacity>
   );
-}
+};
 const stylesTile = StyleSheet.create({
   container: {
     width: TileSize,
     height: TileSize,
-    backgroundColor: "#fff",
-    borderWidth: 1,
+    borderWidth: 0.5,
     borderColor: "#cccccc",
     justifyContent: "center",
     alignItems: "center",
+    borderRadius: 2,
   },
   symbol: {
-    fontSize: 16,
+    fontSize: 22,
     fontWeight: "bold",
   },
 });
+
+export default Tile;

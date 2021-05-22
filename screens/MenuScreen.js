@@ -7,23 +7,23 @@ import {
   Text,
   Picker,
   BackHandler,
-  Alert
+  Alert,
 } from "react-native";
 // import Picker from '@react-native-picker/picker';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { ScreenHeight, ScreenWidth } from "../constants";
 
-function MenuScreen(props) {
+const MenuScreen = (props) => {
   // const [selectedValue, setSelectedValue] = useState(12);
 
   const quiteApp = () => {
-    Alert.alert("You are so happy!","Keep playing. Please.... :))))", [
+    Alert.alert("You are so happy!", "Keep playing. Please.... :))))", [
+      { text: "No. Quite!", onPress: () => BackHandler.exitApp() },
       {
         text: "OK :)",
         onPress: () => {},
         style: "cancel",
       },
-      { text: "No. Quite!", onPress: () => BackHandler.exitApp() },
     ]);
   };
 
@@ -51,7 +51,7 @@ function MenuScreen(props) {
         <Picker.Item label="15 x 15" value={15} />
       </Picker> */}
       <TouchableOpacity
-        style={styles.btnPlay}
+        style={[styles.btnPlay, styles.button]}
         onPress={() => {
           props.navigation.navigate("PlayScreen");
         }}
@@ -60,14 +60,17 @@ function MenuScreen(props) {
           Play
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.btnSetting} onPress={() => {}}>
+      {/* <TouchableOpacity
+        style={[styles.btnSetting, styles.button]}
+        onPress={() => {}}
+      >
         <Text style={{ color: "#fff", fontSize: 20, fontWeight: "bold" }}>
           Setting
         </Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </SafeAreaView>
   );
-}
+};
 export default MenuScreen;
 
 const styles = StyleSheet.create({
@@ -75,7 +78,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     alignItems: "center",
-    justifyContent:'center'
+    justifyContent: "center",
   },
   btnQuit: {
     position: "absolute",
@@ -83,9 +86,8 @@ const styles = StyleSheet.create({
     left: 10,
   },
   logo: {
-    width: Math.floor(ScreenWidth/2),
-    height: Math.floor(ScreenHeight/4),
-    
+    width: Math.floor(ScreenWidth / 2),
+    height: Math.floor(ScreenHeight / 4),
   },
   btnPlay: {
     backgroundColor: "#66ccff",
@@ -109,5 +111,15 @@ const styles = StyleSheet.create({
     marginTop: 40,
     width: 150,
     height: 45,
+  },
+  button: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 2,
   },
 });

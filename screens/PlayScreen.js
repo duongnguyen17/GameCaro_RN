@@ -14,17 +14,17 @@ import { Turn, VectorArray, ScreenHeight, ScreenWidth } from "../constants";
 
 import Map from "../components/Map";
 
-function PlayScreen(props) {
+const PlayScreen = (props) => {
   let count = useRef(0).current;
   let maxCount = useRef(0).current;
-  
+
   const [turn, setTurn] = useState(Turn.player1);
   const [isEnd, setIsEnd] = useState(false);
   const [isPause, setIsPause] = useState(false);
   const [map, setMap] = useState(Array(12).fill(Array(12).fill(0)));
-
+  const [arrWin, setArrWin] = useState([]);
   const onTouch = (row, col) => {
-    console.log(row + col);
+    //console.log(row + col);
     changeMap(row, col);
     checkEndGame(row, col);
     changeTurn();
@@ -58,17 +58,36 @@ function PlayScreen(props) {
       checkVector(VectorArray[i], row, col);
       checkVector(VectorArray[7 - i], row, col);
       maxCount = maxCount >= count ? maxCount : count;
+      if (maxCount >= 5) {
+        let arr = [{ row: row, col: col }]; 
+        makeColor(VectorArray[i], row, col, arr);
+        makeColor(VectorArray[7 - i], row, col, arr);
+        setArrWin(arr);
+        //console.log(`arr`, arr);
+        setIsEnd(!isEnd);
+        break;
+      }
     }
-    if (maxCount >= 5) {
-      setIsEnd(!isEnd);
+  };
+
+  const makeColor = (vector, row, col, arr) => {
+    row += vector.y;
+    col += vector.x;
+    if (!(col < 0 || row < 0 || col > 11 || row > 11)) {
+      if (map[row][col] === turn) {
+        //console.log(`{row,col}`, { row, col });
+        arr.push({ row: row, col: col });
+        makeColor(vector, row, col, arr);
+      }
     }
+    return;
   };
 
   return (
     <SafeAreaView style={stylesGame.game}>
       <View style={stylesOptionBar.optionBar}>
         <TouchableOpacity
-          style={stylesOptionBar.button}
+          style={[stylesOptionBar.button, stylesGame.button]}
           onPress={() => {
             setIsPause(!isPause);
           }}
@@ -79,17 +98,17 @@ function PlayScreen(props) {
             color="gray"
           />
         </TouchableOpacity>
-        <View style={stylesOptionBar.button}>
+        <View style={[stylesOptionBar.button, stylesGame.button]}>
           <Text
-            style={{
-              ...stylesOptionBar.player,
-              color: turn === Turn.player1 ? "#ff3300" : "#a6a6a6",
-            }}
+            style={[
+              stylesOptionBar.player,
+              { color: turn === Turn.player1 ? "#ff3300" : "#a6a6a6" },
+            ]}
           >
             X
           </Text>
         </View>
-        <View style={stylesOptionBar.button}>
+        <View style={[stylesOptionBar.button, stylesGame.button]}>
           <Text
             style={{
               ...stylesOptionBar.player,
@@ -99,11 +118,11 @@ function PlayScreen(props) {
             O
           </Text>
         </View>
-        <TouchableOpacity style={stylesOptionBar.button}>
+        {/* <TouchableOpacity style={[stylesOptionBar.button, stylesGame.button]}>
           <MaterialCommunityIcons name="cog" size={26} color="gray" />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
-      <Map map={map} onTouch={onTouch} />
+      <Map map={map} arrWin={arrWin} onTouch={onTouch} />
       <Modal animationType="fade" transparent={true} visible={isPause}>
         <View style={{ flex: 1, marginTop: 22 }}>
           <View style={stylesPauseGame.container}>
@@ -112,16 +131,27 @@ function PlayScreen(props) {
               style={stylesPauseGame.logo}
             />
             <TouchableOpacity
-              style={stylesPauseGame.button}
+              style={[stylesPauseGame.button, stylesGame.button]}
               onPress={() => setIsPause(!isPause)}
             >
               <Text style={stylesPauseGame.textBtn}>Resume</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={stylesPauseGame.button} onPress={() => {}}>
+            {/* <TouchableOpacity
+              style={[stylesPauseGame.button, stylesGame.button]}
+              onPress={() => {}}
+            >
               <Text style={stylesPauseGame.textBtn}>Setting</Text>
+            </TouchableOpacity> */}
+            <TouchableOpacity
+              style={[stylesPauseGame.button, stylesGame.button]}
+              onPress={() => {
+                props.navigation.dispatch(StackActions.replace("PlayScreen"));
+              }}
+            >
+              <Text style={stylesPauseGame.textBtn}>New Game</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={stylesPauseGame.button}
+              style={[stylesPauseGame.button, stylesGame.button]}
               onPress={() => {
                 props.navigation.goBack();
               }}
@@ -147,6 +177,7 @@ function PlayScreen(props) {
               style={{
                 fontSize: 30,
                 fontWeight: "bold",
+                color: turn === 1 ? "#00cc00" : "#ff3300",
               }}
             >
               {" "}
@@ -155,7 +186,7 @@ function PlayScreen(props) {
           </View>
           <View style={stylesEndGame.select}>
             <TouchableOpacity
-              style={stylesEndGame.button}
+              style={[stylesEndGame.button, stylesGame.button]}
               onPress={() => {
                 props.navigation.dispatch(StackActions.replace("PlayScreen"));
               }}
@@ -165,7 +196,7 @@ function PlayScreen(props) {
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={stylesEndGame.button}
+              style={[stylesEndGame.button, stylesGame.button]}
               onPress={() => {
                 props.navigation.dispatch(StackActions.popToTop());
               }}
@@ -179,7 +210,7 @@ function PlayScreen(props) {
       </Modal>
     </SafeAreaView>
   );
-}
+};
 
 export default PlayScreen;
 
@@ -191,12 +222,22 @@ const stylesGame = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  button: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 2,
+  },
 });
 
 const stylesOptionBar = StyleSheet.create({
   optionBar: {
     flexDirection: "row",
-    backgroundColor: "#66ccff",
+    backgroundColor: "#00aaff",
     height: Math.floor(ScreenHeight / 10),
     width: ScreenWidth,
     top: 0,
@@ -208,7 +249,7 @@ const stylesOptionBar = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5,
+    elevation: 3,
   },
   button: {
     width: Math.floor(ScreenWidth / 4),
@@ -238,7 +279,7 @@ const stylesPauseGame = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5,
+    elevation: 3,
   },
   button: {
     backgroundColor: "#66ccff",
